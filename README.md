@@ -1,5 +1,5 @@
 #ES6 implementation of custom errors in Express app
-This is not a module, it's just a tutorial of how easy in ES6 is to create your own custom error classes.
+Tutorial about how easy is it to create your own custom error classes in ES6.
 
 ##Usage
 libs/responseErrors.es6
@@ -73,7 +73,7 @@ const server = app.listen(3000, () => {
     console.log('Listening on port %s', server.address().port);
 });
 ```
-###Install dependecies (Babel, Express)
+###Install dependencies (Babel, Express)
 from [package.json](https://github.com/PetrKohut/es6-custom-errors-express-app/blob/master/package.json)
 ```sh
 npm install
