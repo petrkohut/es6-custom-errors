@@ -73,6 +73,7 @@ const server = app.listen(3000, () => {
 });
 ```
 ###Install dependecies (Babel, Express)
+from [package.json](https://github.com/PetrKohut/es6-custom-errors-express-app/blob/master/package.json)
 ```sh
 npm install
 ```
