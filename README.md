@@ -1,4 +1,5 @@
 #ES6 implementation of custom errors in Express app
+This is not a module, it's just a tutorial of how easy in ES6 is to create your own custom error classes.
 
 ##Usage
 libs/responseErrors.es6
