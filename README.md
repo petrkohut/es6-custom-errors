@@ -1,8 +1,38 @@
 #ES6 implementation of custom errors in Express app
 Tutorial about how easy is it to create your own custom error classes in ES6.
 
-##Usage
-libs/responseErrors.es6
+##Simple example
+```es6
+class CustomError extends Error {
+    constructor(message, someProperty) {
+        super();
+        Error.captureStackTrace(this, this.constructor);
+        this.name = this.constructor.name;
+        this.message = message;
+        this.someProperty = someProperty;
+    }
+}
+
+class SomeError extends CustomError {
+    constructor() {
+        super('Some error occurred.', 'Foo');
+    }
+}
+
+class SomeAnotherError extends CustomError {
+    constructor() {
+        super('Some another error occurred.', 'Bar');
+    }
+}
+
+const err = new SomeError();
+console.log(err instanceof Error);              // true
+console.log(err instanceof CustomError);        // true
+console.log(err instanceof SomeAnotherError);   // false
+```
+
+##Example in Express app:
+libs/responseErrors.es6:
 ```es6
 class ResponseError extends Error {
     constructor(message, type, status) {
@@ -28,16 +58,6 @@ export class InvalidTokenError extends ResponseError {
 }
 ```
 app.es6:
-```es6
-import {ForbiddenError, InvalidTokenError} from './libs/responseErrors';
-
-const err = new ForbiddenError();
-console.log(err instanceof Error);              // true
-console.log(err instanceof ForbiddenError);     // true
-console.log(err instanceof InvalidTokenError);  // false
-```
-
-##Example of Express app:
 ```es6
 import express from 'express';
 import {ForbiddenError, InvalidTokenError} from './libs/responseErrors';
