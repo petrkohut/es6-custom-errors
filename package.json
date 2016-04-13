@@ -1,16 +1,14 @@
 {
-  "name": "babel-express",
+  "name": "es6-express",
   "version": "1.0.0",
   "description": "ES6 express example",
-  "main": "app.es6",
+  "main": "app.js",
   "scripts": {
-    "start": "node_modules/.bin/babel-node app.es6",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js"
   },
   "author": "Petr Kohut",
   "license": "MIT",
   "dependencies": {
-    "babel": "^5.8.23",
     "express": "^4.13.3"
   }
 }

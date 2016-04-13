@@ -5,10 +5,9 @@ Tutorial about how easy is it to create your own custom error classes in ES6.
 ```es6
 class CustomError extends Error {
     constructor(message, someProperty) {
-        super();
+        super(message);
         Error.captureStackTrace(this, this.constructor);
         this.name = this.constructor.name;
-        this.message = message;
         this.someProperty = someProperty;
     }
 }
@@ -32,68 +31,71 @@ console.log(err instanceof SomeAnotherError);   // false
 ```
 
 ##Example in Express app:
-libs/responseErrors.es6:
+libs/responseErrors.js:
 ```es6
+'use strict'
+
 class ResponseError extends Error {
     constructor(message, type, status) {
-        super();
-        Error.captureStackTrace(this, this.constructor);
-        this.name = this.constructor.name;
-        this.message = message;
-        this.type = type;
-        this.status = status;
+        super(message)
+        Error.captureStackTrace(this, this.constructor)
+        this.name = this.constructor.name
+        this.type = type
+        this.status = status
     }
 }
 
-export class ForbiddenError extends ResponseError {
+module.exports.ForbiddenError = class extends ResponseError {
     constructor() {
-        super('Site access denied.', 'Forbidden', 403);
+        super('Site access denied.', 'Forbidden', 403)
     }
 }
 
-export class InvalidTokenError extends ResponseError {
+module.exports.InvalidTokenError = class extends ResponseError {
     constructor() {
-        super('Specified token is invalid.', 'InvalidToken', 401);
+        super('Specified token is invalid.', 'InvalidToken', 401)
     }
 }
 ```
-app.es6:
+app.js:
 ```es6
-import express from 'express';
-import {ForbiddenError, InvalidTokenError} from './libs/responseErrors';
+'use strict'
 
-const app = express();
+const express = require('express')
+const errors = require('./libs/responseErrors')
+
+const app = express()
 
 //Get item with id = 1
 app.get('/items/1', (req, res, next) => {
-    res.json({name: 'Foo', description: 'Bar'});
-});
+    res.json({name: 'Foo', description: 'Bar'})
+})
 
 //Create new item
 app.post('/items', (req, res, next) => {
-    //Some token failure validation
-    next(new InvalidTokenError());
-});
+    //Failed token validation
+    next(new errors.InvalidTokenError())
+})
 
 //Handle all other requests as Forbidden
 app.use((req, res, next) => {
-    next(new ForbiddenError());
-});
+    next(new errors.ForbiddenError())
+})
 
 //Error handler
 app.use((err, req, res, next) => {
-    const statusCode = err.status || 500;
-    const type = err.type || 'UnknownError';
-    const message = err.message || 'Something went wrong.';
-    res.status(statusCode).json({type, message});
-});
+    const statusCode = err.status || 500
+    const type = err.type || 'UnknownError'
+    const message = err.message || 'Something went wrong.'
+    res.status(statusCode).json({type, message})
+})
 
 //Start server
 const server = app.listen(3000, () => {
-    console.log('Listening on port %s', server.address().port);
-});
+    console.log('Listening on port %s', server.address().port)
+})
 ```
-###Install dependencies (Babel, Express)
+###Install dependencies (Express)
 from [package.json](https://github.com/PetrKohut/es6-custom-errors-express-app/blob/master/package.json)
 ```sh
 npm install
